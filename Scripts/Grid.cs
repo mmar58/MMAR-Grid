@@ -1,6 +1,7 @@
 namespace MMAR.Grid {
     using UnityEngine;
     using AdvancedEditorTools.Attributes;
+    using System.Collections.Generic;
 
     public class Grid : MonoBehaviour {
         public bool debugThis;
@@ -11,10 +12,19 @@ namespace MMAR.Grid {
         [SerializeField] Vector3 gridStartPoint;
         [EndFoldout]
         [BeginFoldout("GameObjects")]
-        public GameObject gridGroundNormal;
+        public GroundGridObject gridGroundNormal;
+        //Grid game objects list
+        public Dictionary<Vector3,GroundGridObject> groundGridObjects=new();
+        [EndFoldout]
+        [BeginFoldout("Specific used game objects")]
+        public GridObject draggedGameObject;
 
-
+        public static Grid instance;
         #region Monobehavior life cycles
+
+        private void Awake() {
+            instance = this;
+        }
         private void Start() {
             //Setting all the grid objects on grid
             GatherAlreadyCreatedGridObject();
@@ -32,7 +42,7 @@ namespace MMAR.Grid {
             var gridStartPoint = new Vector3(this.gridStartPoint.x, this.gridStartPoint.y, this.gridStartPoint.z);
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
-                    GameObject gridGameObject;
+                    GroundGridObject gridGameObject;
                     if (gridGroundParent !=null) {
                         gridGameObject = Instantiate(gridGroundNormal,gridGroundParent);
                     }
@@ -41,11 +51,23 @@ namespace MMAR.Grid {
                     }
                     gridGameObject.transform.position = new(gridStartPoint.x + i, gridStartPoint.y, gridStartPoint.z + j);
                     gridGameObject.name = "Grid " + i + "," + j;
+                    groundGridObjects.Add(gridGameObject.transform.position, gridGameObject);
                 }
             }
         }
+        [Button("Collext Ground Grid Objects in Grid")]
+        void CollectGroundGridObjects() {
+            if(gridGroundParent!=null) {
+                this.groundGridObjects.Clear();
+                GroundGridObject[] groundGridObjects = gridGroundParent.GetComponentsInChildren<GroundGridObject>();
+                foreach(var groundGridObject in groundGridObjects) {
+                    this.groundGridObjects.Add(groundGridObject.transform.position, groundGridObject);
+                }
+                Debug.Log("Collected "+this.groundGridObjects.Count+" ground grid objects");
+            }
+        }
         [Button("Gather Already Created Grid Objects in Grid")]
-        public void GatherAlreadyCreatedGridObject() {
+        void GatherAlreadyCreatedGridObject() {
             if(gridObjectParent != null) {
                 GridObject[] gridObjects=gridObjectParent.GetComponentsInChildren<GridObject>();
                 foreach (var gridObject in gridObjects) {
