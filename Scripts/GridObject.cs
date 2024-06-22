@@ -8,16 +8,31 @@ namespace MMAR.Grid {
         public bool listedInGrid;
         public bool dragEnabled;
         public bool currentlyDragged;
+        public GroundGridObject groundGridObject;
         private void Start() {
         }
         private void OnMouseDown() {
-            MMAR.Grid.Grid.instance.draggedGameObject = this;
-            currentlyDragged = true;
+            MMAR.Grid.Grid.instance.DragTheObject(this);
         }
         private void OnMouseUp() {
             if (currentlyDragged) {
-                currentlyDragged = false;
-                MMAR.Grid.Grid.instance.draggedGameObject = null;
+                MMAR.Grid.Grid.instance.FinishDragging();
+            }
+        }
+        public void OnDraggedStarted() {
+            currentlyDragged = true;
+            if(groundGridObject != null) {
+                groundGridObject.onGridObject = null;
+            }
+        }
+        public void OnDraggedFinished() {
+            currentlyDragged=false;
+            gridPosition=transform.position;
+            if(MMAR.Grid.Grid.instance.groundGridObjects.TryGetValue(gridPosition, out groundGridObject)) {
+                groundGridObject.onGridObject = this;
+            }
+            else {
+                Debug.Log("No ground grid object found at " + gridPosition);
             }
         }
     }

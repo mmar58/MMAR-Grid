@@ -2,6 +2,10 @@ namespace MMAR.Grid {
     using UnityEngine;
     using AdvancedEditorTools.Attributes;
     using System.Collections.Generic;
+    using UnityEngine.Events;
+    using System.Collections;
+    using Shared.Extensions;
+    using System;
 
     public class Grid : MonoBehaviour {
         public bool debugThis;
@@ -11,6 +15,10 @@ namespace MMAR.Grid {
         [SerializeField] Transform gridGroundParent,gridObjectParent;
         [SerializeField] Vector3 gridStartPoint;
         [EndFoldout]
+        [BeginFoldout("Unity  Actions")]
+        public UnityEvent onDragStarted;
+        public UnityEvent onDragFinished;
+        [EndFoldout]
         [BeginFoldout("GameObjects")]
         public GroundGridObject gridGroundNormal;
         //Grid game objects list
@@ -18,7 +26,12 @@ namespace MMAR.Grid {
         [EndFoldout]
         [BeginFoldout("Specific used game objects")]
         public GridObject draggedGameObject;
-
+        [EndFoldout]
+        [BeginFoldout("Materials")]
+        public Material gridGroundNormalMaterial;
+        public Material gridGroundAllowMaterial;
+        public Material gridGroundNotPossinle;
+        [EndFoldout]
         public static Grid instance;
         #region Monobehavior life cycles
 
@@ -28,6 +41,10 @@ namespace MMAR.Grid {
         private void Start() {
             //Setting all the grid objects on grid
             GatherAlreadyCreatedGridObject();
+            //If grid ground dictionary have less item, update it
+            if(gridGroundParent != null&&groundGridObjects.Count<gridGroundParent.childCount) {
+                CollectGroundGridObjects();
+            }
         }
         #endregion
         [Button("Generate Grid Grid")]
@@ -66,13 +83,21 @@ namespace MMAR.Grid {
                 Debug.Log("Collected "+this.groundGridObjects.Count+" ground grid objects");
             }
         }
+        #region Get the grid objects
         [Button("Gather Already Created Grid Objects in Grid")]
         void GatherAlreadyCreatedGridObject() {
             if(gridObjectParent != null) {
                 GridObject[] gridObjects=gridObjectParent.GetComponentsInChildren<GridObject>();
                 foreach (var gridObject in gridObjects) {
                     if (!gridObject.listedInGrid) {
-                        gridObject.gridPosition=gridObject.transform.position;
+                        gridObject.gridPosition = gridObject.transform.position;
+                        GroundGridObject groundGridObject;
+                        if(groundGridObjects.TryGetValue(gridObject.gridPosition, out groundGridObject)) {
+                            gridObject.groundGridObject = groundGridObject;
+                            groundGridObject.onGridObject = gridObject;
+                        }
+                        
+                        
                         GetTheObjectGridPoint(gridObject);
                     }
                 }
@@ -142,7 +167,6 @@ namespace MMAR.Grid {
             gridObject.transform.position = gridObject.gridPosition;
             gridObject.listedInGrid = true;
         }
-
         /// <summary>
         /// If x is in the range of Grid width
         /// </summary>
@@ -165,6 +189,23 @@ namespace MMAR.Grid {
             if (debugThis) {
                 Debug.Log(msg);
             }
+        }
+        #endregion
+        public void DragTheObject(GridObject gridObject) {
+            draggedGameObject = gridObject;
+            gridObject.OnDraggedStarted();
+            onDragStarted.Invoke();
+        }
+        public void FinishDragging() {
+            if(draggedGameObject != null) {
+                draggedGameObject.OnDraggedFinished();
+                onDragFinished.Invoke();
+                draggedGameObject=null;
+            }
+        }
+
+        public void DraggedTo(GroundGridObject groundGridObject) {
+            
         }
     }
 }
