@@ -23,6 +23,12 @@ namespace MMAR.Grid {
                 MouseInputManager.instance.MouseDown(this);
             }
         }
+        public override void MouseLongClick() {
+            base.MouseLongClick();
+            if(Grid.instance != null ) {
+                Grid.instance.DragTheObject(this);
+            }
+        }
         public void OnDraggedStarted() {
             currentlyDragged = true;
             var tempPosition=transform.position;
@@ -31,6 +37,9 @@ namespace MMAR.Grid {
         }
         public void OnDraggedFinished() {
             currentlyDragged=false;
+            var tempPosition=transform.position;
+            tempPosition.y -= dragElivate;
+            transform.position = tempPosition;
             gridPosition=transform.position;
             if(MMAR.Grid.Grid.instance.groundGridObjects.TryGetValue(gridPosition, out groundGridObject)) {
                 groundGridObject.onGridObject = this;

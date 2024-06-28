@@ -49,6 +49,11 @@ namespace MMAR.Grid {
                 CollectGroundGridObjects();
             }
         }
+        private void Update() {
+            if(draggedGameObject != null&&Input.GetMouseButtonUp(0)) {
+                FinishDragging();
+            }
+        }
         #endregion
         [Button("Generate Grid Grid")]
         public void GenerateGridGround() {
@@ -208,7 +213,9 @@ namespace MMAR.Grid {
         }
 
         public void DraggedTo(GroundGridObject groundGridObject) {
-            draggedGameObject.transform.position=groundGridObject.transform.position;
+            var tempPosition = groundGridObject.transform.position;
+            tempPosition.y += draggedGameObject.dragElivate;
+            draggedGameObject.transform.position = tempPosition;
         }
     }
 }
