@@ -5,7 +5,7 @@ namespace MMAR.Grid {
     using UnityEngine.Events;
     using System.Collections;
     using Shared.Extensions;
-    using System;
+    using MMAR.Util;
 
     public class Grid : MonoBehaviour {
         public bool debugThis;
@@ -31,6 +31,9 @@ namespace MMAR.Grid {
         public Material gridGroundNormalMaterial;
         public Material gridGroundAllowMaterial;
         public Material gridGroundNotPossinle;
+        [EndFoldout]
+        [BeginFoldout("Other Properties")]
+        public float DoubleClickTime = .1f;
         [EndFoldout]
         public static Grid instance;
         #region Monobehavior life cycles
@@ -205,7 +208,7 @@ namespace MMAR.Grid {
         }
 
         public void DraggedTo(GroundGridObject groundGridObject) {
-            
+            draggedGameObject.transform.position=groundGridObject.transform.position;
         }
     }
 }

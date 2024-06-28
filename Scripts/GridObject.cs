@@ -3,27 +3,31 @@ namespace MMAR.Grid {
     using System.Collections.Generic;
     using UnityEngine;
 
-    public class GridObject : MonoBehaviour {
+    public class GridObject : InputItem {
         public Vector3 gridPosition;
         public bool listedInGrid;
         public bool dragEnabled;
         public bool currentlyDragged;
         public GroundGridObject groundGridObject;
-        private void Start() {
-        }
+        /// <summary>
+        /// How much should elivate while dragging.<br/>
+        /// It's important show ground.
+        /// </summary>
+        public float dragElivate = 1;
+
+        #region Monobehavior life cycle
+
+        #endregion
         private void OnMouseDown() {
-            MMAR.Grid.Grid.instance.DragTheObject(this);
-        }
-        private void OnMouseUp() {
-            if (currentlyDragged) {
-                MMAR.Grid.Grid.instance.FinishDragging();
+            if(MouseInputManager.instance != null) {
+                MouseInputManager.instance.MouseDown(this);
             }
         }
         public void OnDraggedStarted() {
             currentlyDragged = true;
-            if(groundGridObject != null) {
-                groundGridObject.onGridObject = null;
-            }
+            var tempPosition=transform.position;
+            tempPosition.y += dragElivate;
+            transform.position = tempPosition;
         }
         public void OnDraggedFinished() {
             currentlyDragged=false;

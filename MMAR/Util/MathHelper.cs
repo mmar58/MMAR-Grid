@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+namespace MMAR.Util {
+    using UnityEngine;
 
-public class MathHelper
-{
-    public static float Difference(float x, float y) {
-        return Mathf.Abs(x - y);
+    public class MathHelper {
+        public static float Difference(float x, float y) {
+            return Mathf.Abs(x - y);
+        }
     }
 }
