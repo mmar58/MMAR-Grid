@@ -32,9 +32,6 @@ namespace MMAR.Grid {
         public Material gridGroundAllowMaterial;
         public Material gridGroundNotPossinle;
         [EndFoldout]
-        [BeginFoldout("Other Properties")]
-        public float DoubleClickTime = .1f;
-        [EndFoldout]
         public static Grid instance;
         #region Monobehavior life cycles
 
@@ -214,7 +211,7 @@ namespace MMAR.Grid {
 
         public void DraggedTo(GroundGridObject groundGridObject) {
             var tempPosition = groundGridObject.transform.position;
-            tempPosition.y += draggedGameObject.dragElivate;
+            tempPosition.y = draggedGameObject.transform.position.y;
             draggedGameObject.transform.position = tempPosition;
         }
     }
