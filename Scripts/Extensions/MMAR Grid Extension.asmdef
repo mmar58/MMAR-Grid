@@ -1,0 +1,18 @@
+{
+    "name": "MMARGridExtension",
+    "rootNamespace": "",
+    "references": [
+        "GUID:37d46ca5a0cf1194aa3f5a3bd10942e0",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:936914708b6900344ba9eab7a13444a6"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

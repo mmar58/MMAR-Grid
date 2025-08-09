@@ -1,0 +1,14 @@
+{
+  "name": "com.mmar.gridsystem",
+  "displayName": "MMAR Grid System",
+  "version": "1.0.0",
+  "unity": "6000.1.14f1",
+  "description": "MMAR Grid System is an extension for the Unity Inspector.",
+  "keywords": [ "Grid", "Grid System", "MMAR", "Grid Placement", "Object Placement", "Placement","Path finding" ],
+  "category": "Tools/Level Design",
+  "dependencies": {},
+  "author": {
+    "name": "Malik Md Apu Rahman",
+    "url": "https://mmar58.unaux.com/"
+  }
+}
