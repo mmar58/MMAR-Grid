@@ -24,6 +24,15 @@ This project already includes production-ready extensions:
   * GridMovementController: Bomberman-style 4/8-way tile movement with dash
   * ExplosionManager: tile-by-tile explosion visualisation and blocking
 
+## Install
+
+You can use any **one** of the following three methods:
+
+* Download and import from Asset Store.
+* Unity **Package Manager → Add package by Git URL** `https://github.com/mmar58/MMAR-Grid.git`
+* Clone the repo anywhere on your machine, and use `Install package from disk` from Package Manager.
+* Copy the repo in your unity project
+
 ## Core Concepts
 
 ### GridManager
