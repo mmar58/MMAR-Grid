@@ -1,7 +1,6 @@
 namespace MMAR.GridSystem {
     using System.Collections;
     using System.Collections.Generic;
-    using MMAR.GridSystem.GridObjectAnimation;
     using UnityEngine;
     using NaughtyAttributes;
     public class GridObject : InputItem {
@@ -10,7 +9,6 @@ namespace MMAR.GridSystem {
         public bool dragEnabled;
         public bool currentlyDragged;
         public string gridObjectKey="";
-        BaseAnimationClass gridObjectAnimation;
         public bool newObject = false;
         /// <summary>
         /// How much should elivate while dragging.<br/>
@@ -21,16 +19,10 @@ namespace MMAR.GridSystem {
 
         #region Monobehavior life cycle
         public virtual void Start() {
-            if (gridObjectAnimation == null) {
-                gridObjectAnimation = new(this);
-            }
             if (!listedInGrid)
             {
                 PlaceToNearestGrid();
             }
-        }
-        public virtual void Update() {
-            gridObjectAnimation.Update();
         }
         #endregion
         private void OnMouseDown() {
@@ -51,12 +43,10 @@ namespace MMAR.GridSystem {
         }
         public void OnDraggedStarted() {
             currentlyDragged = true;
-            gridObjectAnimation=new ReachTopAnimation(this);
         }
         public void OnDraggedFinished() {
             currentlyDragged=false;
             Vector3 tempSearchPosition= new(transform.position.x, 0, transform.position.z);
-            gridObjectAnimation =new ReachBottomAnimation(this);
             gridPosition = GridManager.instance.WorldToGrid(tempSearchPosition);
             GridManager.instance.ClearLastGridGroundColor();
             Debug.Log("Dragging finished");

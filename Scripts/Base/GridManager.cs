@@ -53,7 +53,12 @@ namespace MMAR.GridSystem {
         {
             return new Vector3(gridStartPoint.x + gridPos.x, gridStartPoint.y, gridStartPoint.z + gridPos.y);
         }
-        
+        public Vector2Int GetRandomGridPosition()
+        {
+            int x = Random.Range(0, width);
+            int z = Random.Range(0, height);
+            return new Vector2Int(x, z);
+        }
         public bool IsValidGridPosition(Vector2Int pos)
         {
             return pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height;
